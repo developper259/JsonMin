@@ -1,7 +1,7 @@
-# YamlMin
-**YamlMin is a minimized version of yaml.**
+# jsonMin
+**jsonMin is a minimized version of json.**
 
-You can **write** and **read** yaml files.
+You can **write** and **read** json files.
 
 supported variable format :
 - int 
@@ -12,13 +12,13 @@ supported variable format :
 - null
 - vector
 
-Before writing your code, you need to import the YamlMin library:
+Before writing your code, you need to import the jsonMin library:
 
-	#include "path/to/library/Yaml.hpp"
+	#include "path/to/library/json.hpp"
 
 Example **code** for **writing** :
 
-	YamlNode node;
+	jsonNode node;
 
 	int intV = 1234;
 	bool boolV = true;
@@ -33,9 +33,9 @@ Example **code** for **writing** :
 	node["float"] = toString(floatV); // or "1.08573"
 	node["table"] = toString(vec);
 
-	node.write("data.yml"); //replace 'data.yml' with the name of your yaml file
+	node.write("data.yml"); //replace 'data.yml' with the name of your json file
 
-**data.yaml** :
+**data.json** :
 
 	bool: true
 	char: h
@@ -51,9 +51,9 @@ Example **code** for **writing** :
 
 Exemple **code** for **reading** :
 
-	YamlNode node;
+	jsonNode node;
 
-	node.read("data.yml"); //replace 'data.yml' with the name of your yaml file
+	node.read("data.yml"); //replace 'data.yml' with the name of your json file
 
 	std::cout << node["int"] << std::endl;
 	std::cout << node["str"] << std::endl;
