@@ -1,0 +1,83 @@
+# YamlMin
+**YamlMin is a minimized version of yaml.**
+
+You can **write** and **read** yaml files.
+
+supported variable format :
+- int 
+- float
+- string
+- bool
+- char
+- null
+- vector
+
+Before writing your code, you need to import the YamlMin library:
+
+	#include "path/to/library/Yaml.hpp"
+
+Example **code** for **writing** :
+
+	YamlNode node;
+
+	int intV = 1234;
+	bool boolV = true;
+	char charV = 'h';
+	float floatV = 1.08573f;
+	std::vector<std::string> vec{"hello", "hi", "holla", "hallo", ""};
+
+	node["str"] = "hello world!";
+	node["int"] = toString(intV); // or "1234"
+	node["bool"] = toString(boolV); // or "true"
+	node["char"] = toString(charV); // or "h"
+	node["float"] = toString(floatV); // or "1.08573"
+	node["table"] = toString(vec);
+
+	node.write("data.yml"); //replace 'data.yml' with the name of your yaml file
+
+**data.yaml** :
+
+	bool: true
+	char: h
+	float: 1.475930
+	int: 1234
+	str: hello world!
+	table: 
+		- hello
+		- hi
+		- holla
+		- hallo
+		- null
+
+Exemple **code** for **reading** :
+
+	YamlNode node;
+
+	node.read("data.yml"); //replace 'data.yml' with the name of your yaml file
+
+	std::cout << node["int"] << std::endl;
+	std::cout << node["str"] << std::endl;
+	std::cout << node["float"] << std::endl;
+	std::cout << node["bool"] << std::endl;
+	std::cout << node["char"] << std::endl;
+	std::cout << node["table"] << std::endl;
+
+**output** :
+	
+	1234
+	hello world!
+	1.47593
+	true
+	h
+	["hello", "hi", "holla", "hallo", "null"]
+
+you can later convert your variables to 
+- int with the function toInt
+- float with the function toFloat 
+- bool with the function toBool
+- char with the function toChar
+- vector string with the function toVecString
+- vector int with the function toVecInt
+- vector float with the function toVecFloat
+- vector bool with the function toVecBool
+- vector char with the function toVecChar
