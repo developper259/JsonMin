@@ -27,7 +27,7 @@ std::vector<std::string> split(const char* str, char delimiter)
 
 	std::vector<std::string> result(tv, tv + (index + 1));
 	
-    memset(tv, 0, sizeof(tv));
+	memset(tv, 0, sizeof(tv));
 
 	return result;
 }
@@ -62,9 +62,11 @@ std::vector<std::string> split(const char* str, std::string delimiter)
 	}
 
 	std::vector<std::string> result(tv, tv + (index + 1));
+
+	memset(tv, 0, sizeof(tv));
+
 	return result;
 }
-
 
 std::string join(const std::vector<std::string>& vec, std::string delimiter) {
 	std::string result;
@@ -80,6 +82,36 @@ std::string join(const std::vector<std::string>& vec, std::string delimiter) {
 	return result;
 }
 
+std::string replace(std::string str, char holdStr, char newStr)
+{
+	std::string result;
+	int index = 0;
+
+	for (int i = 0; i < str.size() - 1; i++)
+	{
+		char c = str.at(i);
+		
+		if (c == holdStr)
+		{
+			result += newStr;
+		}else
+		{
+			result += c;
+		}
+	}
+
+	return result;
+}
+std::string replace(const std::string& str, const std::string& holdStr, const std::string& newStr) {
+    std::string result = str;
+    size_t index = result.find(holdStr);
+    while (index != std::string::npos) {
+        result.replace(index, holdStr.length(), newStr);
+        index = result.find(holdStr, index + newStr.length());
+    }
+    return result;
+}
+
 std::string supFirstElement(std::string str, char c)
 {
 	if (str == "")
@@ -87,6 +119,15 @@ std::string supFirstElement(std::string str, char c)
 	size_t pos = str.find_first_not_of(c);
 	if (pos != std::string::npos)
 		return str.substr(pos);
+	else
+		return str;
+}
+std::string supLastElement(std::string str, char c) {
+	if (str == "")
+		return str;
+	size_t pos = str.find_last_not_of(c);
+	if (pos != std::string::npos)
+		return str.substr(0, pos + 1);
 	else
 		return str;
 }
