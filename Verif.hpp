@@ -318,4 +318,155 @@ std::string toString(std::vector<char> v)
 	return result;
 }
 
+std::string toString(std::map<std::string, std::string> v)
+{
+	std::string result = "{";
+	auto it = v.begin();
+	
+	for (const auto& val : v)
+	{
+		std::string key = val.first;
+		std::string value = val.second;
+
+		result += "\"" + key + "\": ";
+		if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
+		{
+			result += value;
+		}else
+		{
+			result += "\"" + value + "\"";
+		}
+
+		++it;
+
+		if (it != v.end())
+		{
+			result += ", ";
+		}
+	}
+	result += "}";
+
+	return result;
+}
+std::string toString(std::map<std::string, int> v)
+{
+	std::string result = "{";
+	auto it = v.begin();
+	
+	for (const auto& val : v)
+	{
+		std::string key = val.first;
+		std::string value = toString(val.second);
+
+		result += "\"" + key + "\": ";
+		if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
+		{
+			result += value;
+		}else
+		{
+			result += "\"" + value + "\"";
+		}
+
+		++it;
+
+		if (it != v.end())
+		{
+			result += ", ";
+		}
+	}
+	result += "}";
+	
+	return result;
+}
+std::string toString(std::map<std::string, float> v)
+{
+	std::string result = "{";
+	auto it = v.begin();
+	
+	for (const auto& val : v)
+	{
+		std::string key = val.first;
+		std::string value = toString(val.second);
+
+		result += "\"" + key + "\": ";
+		if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
+		{
+			result += value;
+		}else
+		{
+			result += "\"" + value + "\"";
+		}
+
+		++it;
+
+		if (it != v.end())
+		{
+			result += ", ";
+		}
+	}
+	result += "}";
+	
+	return result;
+}
+std::string toString(std::map<std::string, bool> v)
+{
+	std::string result = "{";
+	auto it = v.begin();
+	
+	for (const auto& val : v)
+	{
+		std::string key = val.first;
+		std::string value = toString(val.second);
+
+		result += "\"" + key + "\": ";
+		if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
+		{
+			result += value;
+		}else
+		{
+			result += "\"" + value + "\"";
+		}
+
+		++it;
+
+		if (it != v.end())
+		{
+			result += ", ";
+		}
+	}
+	result += "}";
+	
+	return result;
+}
+std::string toString(std::map<std::string, char> v)
+{
+	std::string result = "{";
+	auto it = v.begin();
+	
+	for (const auto& val : v)
+	{
+		std::string key = val.first;
+		std::string value = toString(val.second);
+
+		result += "\"" + key + "\": ";
+		if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
+		{
+			result += value;
+		}else
+		{
+			result += "\"" + value + "\"";
+		}
+
+		++it;
+
+		if (it != v.end())
+		{
+			result += ", ";
+		}
+	}
+	result += "}";
+	
+	return result;
+}
+
 #endif

@@ -18,12 +18,9 @@ int main(int argc, char const *argv[])
 
 	node.read("data.json");
 
-	std::map<std::string, char> map = toMapChar(node["testmap"]);
+	std::map<std::string, std::string> map = toMapString(node["testmap"]);
 
-	for (auto& value : map)
-	{
-		std::cout << value.first << " " << value.second << std::endl;
-	}
+	std::cout << toString(map) << std::endl;
 
 	for (const auto& pair : node.getData())
 	{
