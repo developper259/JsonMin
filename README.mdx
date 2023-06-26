@@ -10,6 +10,8 @@ supported variable format :
 - bool
 - char
 - null
+- object
+- map
 
 Before writing your code, you need to import the JsonMin library:
 
@@ -30,20 +32,9 @@ Example **code** for **writing** :
 	node["char"] = toString(charV); // or "h"
 	node["float"] = toString(floatV); // or "1.08573"
 
-	node.write("data.json", true); //replace 'data.json' with the name of your json file
+	node.write("data.json"); //replace 'data.json' with the name of your json file
 
-**JsonNode::write(const char* path, bool isLisibleForHuman)**
-with **isLisibleForHuman** to **true**:
-
-	{
-		"bool": true,
-		"char": "h",
-		"float": 1.08573,
-		"int": 1234,
-		"str": "hello world!"
-	}
-
-with **isLisibleForHuman** to **false**:
+**data.json**:
 
 	{"bool": true, "char": "h", "float": 1.08573, "int": 1234, "str": "hello world!"}
 
@@ -72,3 +63,5 @@ you can later convert your variables to
 - float with the function toFloat 
 - bool with the function toBool
 - char with the function toChar
+- map with the function toMap...
+- vector with the function toVector...
