@@ -7,7 +7,6 @@
 #include <cstring>
 
 #include "Parser.hpp"
-#include "Verif.hpp"
 
 class JsonNode
 {
@@ -42,90 +41,13 @@ public:
 		if (line == "")
 			return -1;
 
-		if (line.at(0) == '{')
+		if (line.at(0) == '{' && line.size() == 1)
 			return true;
 		else
 			return false;
 	}
 
-	void write(const char* path, bool isLisibleForHuman)
-	{
-		init(path);
-
-		std::ofstream file(path);
-
-		if(file.is_open())
-		{
-			auto it = data.begin();
-
-			if (isLisibleForHuman)
-				file << "{" << std::endl;
-			else
-				file << "{";
-
-			for (const auto& pair : data)
-			{
-				std::string value = pair.second;
-				std::string key = pair.first;
-
-
-				value = replace(value, "\"", "\\\"");
-				value = replace(value, "\'", "\\\'");
-				value = replace(value, "\t", "\\\t");
-				value = replace(value, "\n", "\\n");
-				
-				if (isLisibleForHuman)
-				{
-					if (value == "")
-						value = "null";
-
-					if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
-					{
-						file << "\t\"" << key << "\": " << value;
-					}else
-					{
-						file << "\t\"" << key << "\": \"" << value << "\"";
-					}
-
-					++it;
-
-					if (it != data.end())
-					{
-						file << "," << std::endl;
-					}else{
-						file << std::endl;
-					}
-				}else
-				{
-					if (value == "")
-						value = "null";
-
-					if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
-					{
-						file << "\"" << key << "\": " << value;
-					}else
-					{
-						file << "\"" << key << "\": \"" << value << "\"";
-					}
-
-					++it;
-
-					if (it != data.end())
-					{
-						file << ", ";
-					}
-				}
-			}
-
-			file << "}";
-
-			file.close();
-		}else
-		{
-			std::cerr << "error to open file : " << path << std::endl;
-			exit(0);
-		}
-	}
+	void write(const char* path);
 
 	void read(const char* path)
 	{
@@ -134,64 +56,121 @@ public:
 		if (file.is_open()) {
 			std::string line;
 			int i = 0;
-			int isLisibleForHuman = -2;
 
 			while (std::getline(file, line)) {
-				if (i == 0)
-					isLisibleForHuman = isLFH(line);
-
-				if (isLisibleForHuman)
-				{
-					if (line.at(0) != '}' && line.at(0) != '{')
-					{
-						line = supFirstElement(line, ' ');
-						line = supFirstElement(line, '\t');
-
-						std::vector<std::string> l = split(line.c_str(), ':');
-
-						std::string key = l[0];
-						l.erase(l.begin());
-
-						std::string value = join(l, ":");
-
-
-						//sublime data
-						value = supFirstElement(value, ' ');
-
-						key = supFirstElement(key, '\"');
-						key = supLastElement(key, '\"');
-
-						value = supFirstElement(value, ' ');
-						value = supFirstElement(value, '\t');
-
-
-						if (value.at(value.length() - 1) == ',')
-							value = value.substr(0, value.length() - 1);
-						if (value.at(0) == '\"')
-							value = value.substr(1);
-						if (value.at(value.length() - 1) == '\"')
-							value = value.substr(0, value.length() - 1);
-
-						value = replace(value, "\\\"", "\"");
-						value = replace(value, "\\\'", "\'");
-						value = replace(value, "\\\t", "\t");
-						value = replace(value, "\\n", "\n");
-
-						data[key] = value;
-					}
-				}else
-				{
-
-				}
-
-				if (isLisibleForHuman != -1)
-					i++;
+				load(line);
 			}
 
 			file.close();
 		} else {
 			std::cerr << "Erreur lors de l'ouverture du fichier : " << path << std::endl;
 			exit(0);
+		}
+	}
+
+	void load(std::string str)
+	{
+		if (str.at(0) != '{' || str.at(str.size() - 1) != '}')
+		{
+			std::cerr << "str is not a json value : " << str << std::endl;
+			exit(0);
+		}
+
+
+		str.erase(str.begin());
+		str.erase(str.end() - 1);
+
+		char tv[510][1020];
+
+		int index = 0;
+		int index2 = 0;
+		int crochNb = 0;
+		bool InStr = false;
+		char EChar;
+
+		for (int i = 0; i < str.size(); i++)
+		{
+			char c = str[i];
+			if (c == '"')
+			{
+				if (EChar == '\\')
+				{
+					InStr = true;
+				}else
+				{
+					InStr = false;
+				}
+			}
+			if (c == '{' || c == '[')
+			{
+				if (!InStr)
+				{
+					crochNb++;	
+				}
+			}
+
+			if (c == '}' || c == ']')
+			{
+				if (!InStr)
+				{
+					crochNb--;
+				}
+			}
+			if(c == ',' && !InStr && crochNb == 0)
+			{
+				index++;
+				index2 = 0;
+			}else
+			{
+				tv[index][index2] = c;
+				index2++;
+			}
+			EChar = c;
+		}
+
+		std::vector<std::string> vec(tv, tv + (index + 1));
+		
+		memset(tv, 0, sizeof(tv));
+
+		for (std::string line : vec)
+		{
+			std::vector<std::string> l = split(line.c_str(), ':');
+
+			std::string key = l[0];
+			l.erase(l.begin());
+
+			std::string value = join(l, ":");
+
+
+			//sublime data
+			value = supFirstElement(value, ' ');
+			value = supFirstElement(value, '\t');
+			key = supFirstElement(key, ' ');
+			key = supFirstElement(key, '\t');
+
+
+			key = supLastElement(key, ' ');
+			key = supLastElement(key, '\t');
+			value = supLastElement(value, ' ');
+			value = supLastElement(value, '\t');
+
+			key = supFirstElement(key, '\"');
+			key = supLastElement(key, '\"');
+
+
+			if (value.at(value.length() - 1) == ',')
+				value = value.substr(0, value.length() - 1);
+			if (value.at(0) == '\"')
+				value = value.substr(1);
+			if (value.at(value.length() - 1) == '\"')
+				value = value.substr(0, value.length() - 1);
+
+			value = replace(value, "\\\"", "\"");
+			value = replace(value, "\\\'", "\'");
+			value = replace(value, "\\\t", "\t");
+			value = replace(value, "\\n", "\n");
+
+			data[key] = value;
 		}
 	}
 
@@ -244,5 +223,59 @@ public:
 			return data[key];
 	}
 };
+#include "Verif.hpp"
+
+void JsonNode::write(const char* path)
+{
+	init(path);
+
+	std::ofstream file(path);
+
+	if(file.is_open())
+	{
+		auto it = data.begin();
+
+		file << "{";
+
+		for (const auto& pair : data)
+		{
+			std::string value = pair.second;
+			std::string key = pair.first;
+
+
+			value = replace(value, "\"", "\\\"");
+			value = replace(value, "\'", "\\\'");
+			value = replace(value, "\t", "\\\t");
+			value = replace(value, "\n", "\\n");
+				
+				
+			if (value == "")
+				value = "null";
+
+			if (isInt(value) != 0 || isFloat(value) != 0 || isBool(value) != -1)
+			{
+				file << "\"" << key << "\": " << value;
+			}else
+			{
+				file << "\"" << key << "\": \"" << value << "\"";
+			}
+
+			++it;
+
+			if (it != data.end())
+			{
+				file << ", ";
+			}
+		}
+
+		file << "}";
+
+		file.close();
+	}else
+	{
+		std::cerr << "error to open file : " << path << std::endl;
+		exit(0);
+	}
+}
 
 #endif

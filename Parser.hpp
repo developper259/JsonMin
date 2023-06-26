@@ -8,7 +8,7 @@
 
 std::vector<std::string> split(const char* str, char delimiter)
 {
-	char tv[100][255];
+	char tv[510][1020];
 	int index = 0;
 	int index2 = 0;
 	for (int i = 0; i < strlen(str); i++)
@@ -34,7 +34,7 @@ std::vector<std::string> split(const char* str, char delimiter)
 
 std::vector<std::string> split(const char* str, std::string delimiter)
 {
-	char tv[100][255];
+	char tv[510][1020];
 	int index = 0;
 	int index2 = 0;
 	int index3 = 0;

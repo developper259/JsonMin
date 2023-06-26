@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include "Json.hpp"
+
 bool isInt(std::string str)
 {
 	try {
@@ -87,6 +89,7 @@ std::vector<std::string> toVecString(std::string v)
 	}
 
 	v = supFirstElement(v, '[');
+	v = supLastElement(v, ']');
 
 	std::vector<std::string> vec = split(v.c_str(), "\", \"");
 
@@ -141,6 +144,78 @@ std::vector<char> toVecChar(std::string v)
 	}
 
 	return vec;
+}
+std::map<std::string, std::string> toMapString(std::string str)
+{
+	if (str == "")
+		return {};
+
+	JsonNode node;
+	node.load(str);
+
+	std::map<std::string, std::string> map = node.getData();
+
+	return map;
+}
+std::map<std::string, int> toMapInt(std::string str)
+{
+	std::map<std::string, std::string> map = toMapString(str);
+	std::map<std::string, int> data;
+
+	for (auto& value : map)
+	{
+		std::string key = value.first;
+		int val = toInt(value.second);
+
+		data[key] = val;
+	}
+
+	return data;
+}
+std::map<std::string, float> toMapFloat(std::string str)
+{
+	std::map<std::string, std::string> map = toMapString(str);
+	std::map<std::string, float> data;
+
+	for (auto& value : map)
+	{
+		std::string key = value.first;
+		float val = toFloat(value.second);
+
+		data[key] = val;
+	}
+
+	return data;
+}
+std::map<std::string, bool> toMapBool(std::string str)
+{
+	std::map<std::string, std::string> map = toMapString(str);
+	std::map<std::string, bool> data;
+
+	for (auto& value : map)
+	{
+		std::string key = value.first;
+		bool val = isBool(value.second);
+
+		data[key] = val;
+	}
+
+	return data;
+}
+std::map<std::string, char> toMapChar(std::string str)
+{
+	std::map<std::string, std::string> map = toMapString(str);
+	std::map<std::string, char> data;
+
+	for (auto& value : map)
+	{
+		std::string key = value.first;
+		char val = isChar(value.second);
+
+		data[key] = val;
+	}
+
+	return data;
 }
 
 std::string toString(int v)
