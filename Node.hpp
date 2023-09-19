@@ -55,7 +55,6 @@ public:
 
 		if (file.is_open()) {
 			std::string line;
-			int i = 0;
 
 			while (std::getline(file, line)) {
 				load(line);
@@ -88,7 +87,7 @@ public:
 		bool InStr = false;
 		char EChar;
 
-		for (int i = 0; i < str.size(); i++)
+		for (size_t i = 0; i < str.size(); i++)
 		{
 			char c = str[i];
 			if (c == '"')

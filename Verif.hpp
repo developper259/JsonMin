@@ -11,7 +11,7 @@ bool isInt(std::string str)
 {
 	try {
 		size_t pos = 0;
-		int nb = std::stoi(str, &pos);
+		std::stoi(str, &pos);
 		if (pos == str.length())
 			return true;
 		else
@@ -35,7 +35,7 @@ int toInt(std::string str)
 bool isFloat(std::string str)
 {
 	try {
-		float f = std::stof(str);
+		std::stof(str);
 		return true;
 	} catch (const std::exception&) {
 		return false;

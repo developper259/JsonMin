@@ -11,7 +11,7 @@ std::vector<std::string> split(const char* str, char delimiter)
 	char tv[510][1020];
 	int index = 0;
 	int index2 = 0;
-	for (int i = 0; i < strlen(str); i++)
+	for (size_t i = 0; i < strlen(str); i++)
 	{
 		char c = str[i];
 		if(c == delimiter)
@@ -38,7 +38,7 @@ std::vector<std::string> split(const char* str, std::string delimiter)
 	int index = 0;
 	int index2 = 0;
 	int index3 = 0;
-	for (int i = 0; i < strlen(str) - 1; i++)
+	for (size_t i = 0; i < strlen(str) - 1; i++)
 	{
 		char c = str[i];
 		
@@ -52,7 +52,7 @@ std::vector<std::string> split(const char* str, std::string delimiter)
 			index2++;
 		}
 
-		if (index3 == delimiter.size())
+		if ((std::string::size_type) index3 == delimiter.size())
 		{
 			index++;
 			index3 = 0;
@@ -85,9 +85,8 @@ std::string join(const std::vector<std::string>& vec, std::string delimiter) {
 std::string replace(std::string str, char holdStr, char newStr)
 {
 	std::string result;
-	int index = 0;
 
-	for (int i = 0; i < str.size() - 1; i++)
+	for (size_t i = 0; i < str.size() - 1; i++)
 	{
 		char c = str.at(i);
 		
